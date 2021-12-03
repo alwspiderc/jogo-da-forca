@@ -9,12 +9,7 @@ public class Palavras {
 	
 	private List<String> palavras = Arrays.asList(
 			"Caneta",
-			"Lapis",
-			"Caderno",
-			"Comida",
-			"Pizza",
-			"Olhos", 
-			"Bola"
+			"Caneta"
 			);
 	
 	protected String palavraAleatoria(){
