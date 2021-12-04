@@ -19,29 +19,35 @@ public class VisaoJogo {
 	
 	private void executarJogo(){
 		try{
+			tracosPalavra();
 			for (int i = 0; i < 2; i++) {
 				console("Digite uma Letra: ");
 				letra = entrada.nextLine();
 				
-//				if (!jogo.compararLetras(letra)) {
-//					errosJogo();
-//				}
-				jogo.setErros(4);
-				console(errosJogo());
+				if (!jogo.compararLetras(letra)) {
+					jogo.setErros(4);
+					console(errosJogo());
+				}
 			}
-			
-			
 		}catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 	
-	private void console(String texto){
-		System.out.println(texto);
+	private void tracosPalavra() {
+		String[] espacos = new String[jogo.getPalavra().length()];
+		
+		for (int i = 0; i < jogo.getPalavra().length(); i++) {
+			espacos[i] = "_ ";
+		}
+	console(espacos);
 	}
-	private void console(VisaoJogo erro){
-		System.out.println(erro);
+	
+	private Lis<String> colocarPalavraAcertadaNoLugar() {
+		
+		return null;
 	}
+	
 	
 	
 //	private void ExecutarJogo() {
@@ -88,7 +94,7 @@ public class VisaoJogo {
 	public String errosJogo() {
 		StringBuilder sb = new StringBuilder();
 
-		if (jogo.getErros() == 1) {
+		if (jogo.getErros() == 0) {
 			sb.append("|-----------------------|\n");
 			sb.append("|                       \n");
 			sb.append("|                       \n");
@@ -96,7 +102,7 @@ public class VisaoJogo {
 			return sb.toString();
 		}
 
-		if (jogo.getErros() == 2) {
+		if (jogo.getErros() == 1) {
 			sb.append("|----------------------| \n");
 			sb.append("|                      O \n");
 			sb.append("|                        \n");
@@ -104,7 +110,7 @@ public class VisaoJogo {
 			return sb.toString();
 		}
 
-		if (jogo.getErros() == 3) {
+		if (jogo.getErros() == 2) {
 			sb.append("|----------------------| \n");
 			sb.append("|                      O \n");
 			sb.append("|                      | \n");
@@ -112,10 +118,18 @@ public class VisaoJogo {
 			return sb.toString();
 		}
 
-		if (jogo.getErros() == 4) {
+		if (jogo.getErros() == 3) {
 			sb.append("|----------------------| \n");
 			sb.append("|                      O \n");
 			sb.append("|                      |\\ \n");
+			sb.append("|                        \n");
+			return sb.toString();
+		}
+
+		if (jogo.getErros() == 4) {
+			sb.append("|----------------------| \n");
+			sb.append("|                      O \n");
+			sb.append("|                     /|\\ \n");
 			sb.append("|                        \n");
 			return sb.toString();
 		}
@@ -124,19 +138,11 @@ public class VisaoJogo {
 			sb.append("|----------------------| \n");
 			sb.append("|                      O \n");
 			sb.append("|                     /|\\ \n");
-			sb.append("|                        \n");
-			return sb.toString();
-		}
-
-		if (jogo.getErros() == 6) {
-			sb.append("|----------------------| \n");
-			sb.append("|                      O \n");
-			sb.append("|                     /|\\ \n");
 			sb.append("|                       \\ \n");
 			return sb.toString();
 		}
 
-		if (jogo.getErros() == 7) {
+		if (jogo.getErros() == 6) {
 			sb.append("|----------------------| \n");
 			sb.append("|                      O \n");
 			sb.append("|                     /|\\ \n");
@@ -148,4 +154,17 @@ public class VisaoJogo {
 
 	}
 
+	private void console(String texto){
+		System.out.println(texto);
+	}
+//	private void console(VisaoJogo erro){
+//		System.out.println(erro);
+//	}
+	private void console(String[] tracos){
+		for (String es : tracos) {
+			System.out.print(es);
+		}
+		System.out.println();
+	}
+	
 }
