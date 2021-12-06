@@ -63,14 +63,10 @@ public class Jogo {
 	public boolean compararLetras(String letra) {
 		for (String letraPalavra : letrasPalavra) {
 			if (letra.equalsIgnoreCase(letraPalavra)) {
-				return true;
-			}
-
-			if (!letra.equalsIgnoreCase(letraPalavra)) {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 
