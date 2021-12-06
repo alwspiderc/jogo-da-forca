@@ -8,7 +8,9 @@ public class Palavras {
 	private Random random = new Random();
 	
 	private List<String> palavras = Arrays.asList(
-			"oi"
+			"Oi",
+			"tudo",
+			"bem"
 			);
 	
 	protected String palavraAleatoria(){

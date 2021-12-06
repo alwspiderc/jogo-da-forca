@@ -8,9 +8,10 @@ public class Jogo {
 	private String palavra;
 	private List<String> letrasPalavra = new ArrayList<String>();
 	private Palavras palavras = new Palavras();
-	private final int totalPontos = 6;
-	private int erros;
-
+	private List<String> letrasErradas = new ArrayList<>();
+	private int erros = 0;
+	private final int prontos = 7;
+ 
 	public Jogo() {
 		this.palavra = palavras.palavraAleatoria();
 		separoLetra(palavra);
@@ -39,6 +40,18 @@ public class Jogo {
 	public void setErros(int erros) {
 		this.erros = erros;
 	}
+	
+	public int getProntos() {
+		return prontos;
+	}
+
+	public List<String> getLetrasErradas() {
+		return letrasErradas;
+	}
+
+	public void setLetrasErradas(String letrasErradas) {
+		this.letrasErradas.add(letrasErradas);
+	}
 
 	public void separoLetra(String palavra) {
 		for (int i = 0; i < palavra.length(); i++) {
@@ -50,22 +63,15 @@ public class Jogo {
 	public boolean compararLetras(String letra) {
 		for (String letraPalavra : letrasPalavra) {
 			if (letra.equalsIgnoreCase(letraPalavra)) {
-				
-				System.out.println("Acertou!");
 				return true;
 			}
 
 			if (!letra.equalsIgnoreCase(letraPalavra)) {
-				
-				//setErros(erros + 1);
 				return false;
 			}
 		}
-		System.out.println(getErros());
 		return false;
 	}
 
-	public int getTotalPontos() {
-		return totalPontos;
-	}
+
 }

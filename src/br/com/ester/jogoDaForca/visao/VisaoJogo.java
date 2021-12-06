@@ -1,95 +1,124 @@
 package br.com.ester.jogoDaForca.visao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+import br.com.ester.jogoDaForca.excecao.PerderException;
 import br.com.ester.jogoDaForca.excecao.SairException;
 import br.com.ester.jogoDaForca.modelo.Jogo;
 
 public class VisaoJogo {
 
-	Jogo jogo;
-	Scanner entrada = new Scanner(System.in);
-	String letra;
+	private List<String> espacos = new ArrayList<>();
+	private int venceu;
+	private Jogo jogo;
+	private Scanner entrada = new Scanner(System.in);
+	private String letra;
 	
 	public VisaoJogo(Jogo jogo) {
 		this.jogo = jogo;
-		executarJogo();
+		cicloJogo();
 	}
 
 	
 	private void executarJogo(){
 		try{
-			tracosPalavra();
-			for (int i = 0; i < 2; i++) {
-				console("Digite uma Letra: ");
-				letra = entrada.nextLine();
-				
-				if (!jogo.compararLetras(letra)) {
-					jogo.setErros(4);
-					console(errosJogo());
+			boolean continuar = true;
+			while(continuar) {
+				System.out.println("Outra partida? (S/n)");
+				String resposta = entrada.next();
+				if("n".equalsIgnoreCase(resposta)) {
+					continuar = false;
+					break;
 				}
+				
+				if("s".equalsIgnoreCase(resposta)) {
+					reiniciar();
+					cicloJogo();
+				}
+				
+				console("Por favor, digite uma opção válida!\n");
 			}
-		}catch (Exception e) {
-			System.out.println(e);
+		}catch (SairException e) {
+			System.out.println("Tchau!!");
+		}finally {
+			entrada.close();
 		}
 	}
 	
-	private void tracosPalavra() {
-		String[] espacos = new String[jogo.getPalavra().length()];
-		
-		for (int i = 0; i < jogo.getPalavra().length(); i++) {
-			espacos[i] = "_ ";
+	private void cicloJogo() {
+		console("--------- JOGO DA FORCA --------- \n");
+		try {
+			
+			
+			for (int i = 0; i < jogo.getProntos(); i++) {
+				console(errosJogo());
+				if(jogo.getErros() < 6) {
+					console("Digite uma Letra: ");
+					letra = entrada.nextLine();
+					tracosPalavra();
+				}
+				
+				if(jogo.getErros() == 6) {
+					console("Você Perceu Venceu!");
+					executarJogo();
+				}
+				
+				if(venceu == jogo.getPalavra().length()) {
+					console("Você Venceu!");
+					executarJogo();
+				}
+				
+				
+				if (!jogo.compararLetras(letra)) {
+					jogo.setErros(jogo.getErros() + 1);
+					jogo.setLetrasErradas(letra);
+				}
+				
+				
+				
+				console("Letras erradas: " + jogo.getLetrasErradas());
+			}
+		} catch (PerderException e) {
+			console("Você perdeu o jogo!");
 		}
+		
+	}
+	
+	
+	private void tracosPalavra() {				
+		if (espacos.size() == 0) {
+			for (int i = 0; i < jogo.getPalavra().length(); i++) {
+				espacos.add("_ ");
+			}
+		}
+	colocarPalavraAcertadaNoLugar(espacos);	
 	console(espacos);
 	}
 	
-	private Lis<String> colocarPalavraAcertadaNoLugar() {
+	private List<String> colocarPalavraAcertadaNoLugar(List<String> espacos) {
 		
-		return null;
+		List<String> letrasPalavra = new ArrayList<>();
+		for (int i = 0; i < jogo.getPalavra().length(); i++) {
+			letrasPalavra.add(i, jogo.getPalavra().substring(i, i + 1));
+		}
+		
+		for (int i = 0; i < letrasPalavra.size(); i++) {
+			if (letrasPalavra.get(i).equalsIgnoreCase(letra)) {
+				int indice = i;
+				for (int j = 0; j < letrasPalavra.size(); j++) {
+					if (j == indice) {
+						espacos.set(indice, letra);
+						venceu++;
+					}
+				}
+			}
+		}
+		return espacos;
 	}
 	
 	
-	
-//	private void ExecutarJogo() {
-//		try {
-//			boolean continuar = true;
-//
-//		} catch (SairException e) {
-//			System.out.println("Saiu!");
-//		} finally {
-//			entrada.close();
-//		}
-//	}
-//
-//	private void executarJogo() {
-//		try {
-//			boolean continuar = true;
-//			while(continuar){
-//				cicloDoJogo();
-//				System.out.println("Outra partida? (S/n)");
-//				String resposta = entrada.nextLine();
-//				if("n".equalsIgnoreCase(resposta)){
-//					continuar = false;
-//				}else{
-//					jogo.();
-//				}
-//
-//		} catch (SairException e) {
-//			System.out.println("Tchau!!!");
-//		} finally {
-//			entrada.close();
-//		}
-//	}
-
-//	private void cicloDoJogo() {
-//		
-//	}
-//
-//	public void iniciarJogo() {
-//		for (int i = 0; i < jogo.; i++) {
-//			System.out.print("- ");
-//		}
-//	}
 
 	public String errosJogo() {
 		StringBuilder sb = new StringBuilder();
@@ -147,6 +176,7 @@ public class VisaoJogo {
 			sb.append("|                      O \n");
 			sb.append("|                     /|\\ \n");
 			sb.append("|                     / \\ \n");
+			return sb.toString();
 		}
 		sb.append("\n");
 		
@@ -157,14 +187,21 @@ public class VisaoJogo {
 	private void console(String texto){
 		System.out.println(texto);
 	}
+	
 //	private void console(VisaoJogo erro){
 //		System.out.println(erro);
 //	}
-	private void console(String[] tracos){
+	
+	private void console(List<String> tracos){
 		for (String es : tracos) {
-			System.out.print(es);
+			console(es);
 		}
-		System.out.println();
 	}
 	
+	private void reiniciar() {
+		espacos = new ArrayList<>();
+		jogo.setPalavra();
+		jogo.setErros(0);
+		
+	}
 }
