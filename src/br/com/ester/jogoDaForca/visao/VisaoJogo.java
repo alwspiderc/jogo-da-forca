@@ -33,7 +33,8 @@ public class VisaoJogo {
 
 				if ("s".equalsIgnoreCase(resposta)) {
 					reiniciar();
-
+					System.out.println("espacos.size(): "+espacos.size());
+					
 				} else if ("n".equals(resposta)) {
 					continuar = false;
 				} else {
@@ -70,6 +71,7 @@ public class VisaoJogo {
 
 				if (jogo.compararLetras(letra)) {
 					jogo.setErros(jogo.getErros() + 1);
+					System.out.println("jogo.getErros():   " + jogo.getErros());
 					console(errosJogo());
 					jogo.setLetrasErradas(letra);
 
@@ -108,16 +110,10 @@ public class VisaoJogo {
 	}
 
 	private List<String> colocarPalavraAcertadaNoLugar(List<String> espacos) {
-
-		List<String> letrasPalavra = new ArrayList<>();
-		for (int i = 0; i < jogo.getPalavra().length(); i++) {
-			letrasPalavra.add(i, jogo.getPalavra().substring(i, i + 1));
-		}
-
-		for (int i = 0; i < letrasPalavra.size(); i++) {
-			if (letrasPalavra.get(i).equalsIgnoreCase(letra)) {
+		for (int i = 0; i < jogo.getLetrasPalavra().size(); i++) {
+			if (jogo.getLetrasPalavra().get(i).equalsIgnoreCase(letra)) {
 				int indice = i;
-				for (int j = 0; j < letrasPalavra.size(); j++) {
+				for (int j = 0; j < jogo.getLetrasPalavra().size(); j++) {
 					if (j == indice) {
 						espacos.set(indice, letra);
 						venceu++;
@@ -204,9 +200,13 @@ public class VisaoJogo {
 	}
 
 	private void reiniciar() {
-		espacos = new ArrayList<>();
+		espacos.clear();
+		System.out.println("espacos.size(): "+espacos.size());
 		venceu = 1;
+		jogo.getLetrasPalavra().clear();
+		System.out.println("jogo.getLetrasPalavra().size(): "+ jogo.getLetrasPalavra().size());
 		jogo.getLetrasErradas().clear();
+		System.out.println("jogo.getLetrasErradas().size(): "+ jogo.getLetrasErradas().size());
 		jogo.setPalavra();
 		jogo.setErros(0);
 
